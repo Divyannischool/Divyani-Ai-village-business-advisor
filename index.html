@@ -1,0 +1,1353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Village Business Advisor</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+    background:#f3f7f3;
+    color:#17251a;
+    min-height:100vh;
+}
+
+body.dark{
+    background:#111713;
+    color:#f2f7f2;
+}
+
+header{
+    background:linear-gradient(135deg,#146c35,#28a745);
+    color:white;
+    padding:20px;
+    position:sticky;
+    top:0;
+    z-index:10;
+    box-shadow:0 4px 15px #0002;
+}
+
+.header-inner{
+    max-width:1200px;
+    margin:auto;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:15px;
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.logo-icon{
+    font-size:40px;
+}
+
+.logo h1{
+    font-size:24px;
+}
+
+.logo p{
+    font-size:13px;
+    opacity:.9;
+}
+
+.header-buttons{
+    display:flex;
+    gap:8px;
+}
+
+.header-buttons button{
+    border:0;
+    background:#ffffff22;
+    color:white;
+    padding:10px 13px;
+    border-radius:10px;
+    cursor:pointer;
+    font-size:17px;
+}
+
+.container{
+    max-width:1200px;
+    margin:auto;
+    padding:25px 15px;
+}
+
+.hero{
+    text-align:center;
+    padding:30px 10px;
+}
+
+.hero h2{
+    font-size:34px;
+    margin-bottom:10px;
+}
+
+.hero p{
+    color:#607060;
+    max-width:700px;
+    margin:auto;
+    line-height:1.6;
+}
+
+.dark .hero p{
+    color:#b8c8ba;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:280px 1fr;
+    gap:20px;
+}
+
+.sidebar,.chat-box,.calculator,.features{
+    background:white;
+    border-radius:18px;
+    box-shadow:0 5px 20px #00000010;
+}
+
+.dark .sidebar,
+.dark .chat-box,
+.dark .calculator,
+.dark .features{
+    background:#1b241d;
+}
+
+.sidebar{
+    padding:18px;
+    height:max-content;
+}
+
+.sidebar h3{
+    margin-bottom:15px;
+}
+
+.quick-btn{
+    width:100%;
+    padding:12px;
+    margin:5px 0;
+    border:1px solid #dce7de;
+    background:#f7faf7;
+    border-radius:10px;
+    cursor:pointer;
+    text-align:left;
+    transition:.2s;
+}
+
+.quick-btn:hover{
+    background:#dff3e3;
+    transform:translateX(3px);
+}
+
+.dark .quick-btn{
+    background:#253126;
+    color:white;
+    border-color:#374839;
+}
+
+.chat-box{
+    min-height:600px;
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+}
+
+.chat-header{
+    padding:17px;
+    border-bottom:1px solid #e5e5e5;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.dark .chat-header{
+    border-color:#344137;
+}
+
+.status{
+    color:#18833a;
+    font-size:13px;
+}
+
+.chat-messages{
+    flex:1;
+    padding:20px;
+    min-height:400px;
+    max-height:600px;
+    overflow-y:auto;
+}
+
+.message{
+    display:flex;
+    margin-bottom:18px;
+    gap:10px;
+}
+
+.message.user{
+    justify-content:flex-end;
+}
+
+.avatar{
+    width:38px;
+    height:38px;
+    border-radius:50%;
+    background:#e1f3e5;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-shrink:0;
+}
+
+.user .avatar{
+    background:#d9e9ff;
+}
+
+.bubble{
+    max-width:80%;
+    padding:13px 15px;
+    border-radius:15px;
+    line-height:1.55;
+    white-space:pre-wrap;
+}
+
+.bot .bubble{
+    background:#f0f5f1;
+}
+
+.user .bubble{
+    background:#198754;
+    color:white;
+}
+
+.dark .bot .bubble{
+    background:#29352c;
+}
+
+.input-area{
+    padding:15px;
+    border-top:1px solid #ddd;
+}
+
+.dark .input-area{
+    border-color:#344137;
+}
+
+textarea{
+    width:100%;
+    min-height:80px;
+    resize:none;
+    border:1px solid #ccd8ce;
+    border-radius:12px;
+    padding:13px;
+    outline:none;
+    font-size:15px;
+    background:white;
+    color:#17251a;
+}
+
+.dark textarea{
+    background:#121813;
+    color:white;
+    border-color:#435045;
+}
+
+.input-buttons{
+    display:flex;
+    gap:8px;
+    margin-top:9px;
+    flex-wrap:wrap;
+}
+
+.btn{
+    border:0;
+    padding:11px 15px;
+    border-radius:10px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.btn-primary{
+    background:#198754;
+    color:white;
+}
+
+.btn-secondary{
+    background:#e8f0e9;
+    color:#17301d;
+}
+
+.dark .btn-secondary{
+    background:#2d3b30;
+    color:white;
+}
+
+.features{
+    margin-top:25px;
+    padding:20px;
+}
+
+.features h2{
+    text-align:center;
+    margin-bottom:20px;
+}
+
+.feature-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:15px;
+}
+
+.feature{
+    padding:18px;
+    background:#f6faf6;
+    border-radius:14px;
+    text-align:center;
+}
+
+.dark .feature{
+    background:#253026;
+}
+
+.feature-icon{
+    font-size:30px;
+    margin-bottom:8px;
+}
+
+.calculator{
+    margin-top:25px;
+    padding:20px;
+}
+
+.calculator h2{
+    margin-bottom:15px;
+}
+
+.calc-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+}
+
+.calc-grid input,
+.calc-grid select{
+    padding:12px;
+    border:1px solid #ccd8ce;
+    border-radius:9px;
+    width:100%;
+}
+
+.dark .calc-grid input,
+.dark .calc-grid select{
+    background:#121813;
+    color:white;
+    border-color:#435045;
+}
+
+.result{
+    margin-top:15px;
+    padding:15px;
+    border-radius:12px;
+    background:#e8f7eb;
+    font-size:18px;
+}
+
+.dark .result{
+    background:#253a29;
+}
+
+.typing{
+    display:inline-block;
+}
+
+.typing span{
+    width:7px;
+    height:7px;
+    display:inline-block;
+    background:#198754;
+    border-radius:50%;
+    margin:2px;
+    animation:bounce 1s infinite;
+}
+
+.typing span:nth-child(2){animation-delay:.15s}
+.typing span:nth-child(3){animation-delay:.3s}
+
+@keyframes bounce{
+    0%,80%,100%{transform:scale(.5)}
+    40%{transform:scale(1)}
+}
+
+footer{
+    text-align:center;
+    padding:25px;
+    color:#657267;
+}
+
+@media(max-width:900px){
+    .grid{
+        grid-template-columns:1fr;
+    }
+
+    .feature-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+}
+
+@media(max-width:600px){
+    .hero h2{
+        font-size:26px;
+    }
+
+    .header-inner{
+        align-items:flex-start;
+    }
+
+    .logo h1{
+        font-size:18px;
+    }
+
+    .logo-icon{
+        font-size:30px;
+    }
+
+    .feature-grid,
+    .calc-grid{
+        grid-template-columns:1fr;
+    }
+
+    .bubble{
+        max-width:90%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="header-inner">
+
+<div class="logo">
+<div class="logo-icon">🌾</div>
+<div>
+<h1>AI Village Business Advisor</h1>
+<p>Smart business guidance for rural entrepreneurs</p>
+</div>
+</div>
+
+<div class="header-buttons">
+<button onclick="toggleDark()" title="Dark Mode">🌙</button>
+<button onclick="clearChat()" title="Clear Chat">🗑️</button>
+</div>
+
+</div>
+</header>
+
+
+<div class="container">
+
+<section class="hero">
+<h2>🌱 आपका Smart Village Business Advisor</h2>
+<p>
+Business idea, investment, profit, marketing, customers, pricing,
+loan और business planning के लिए AI से सलाह लें।
+</p>
+</section>
+
+
+<div class="grid">
+
+<aside class="sidebar">
+
+<h3>⚡ Quick Questions</h3>
+
+<button class="quick-btn" onclick="quickAsk('मेरे गांव में कम निवेश में कौन सा business शुरू कर सकता हूं?')">
+💡 Low Investment Ideas
+</button>
+
+<button class="quick-btn" onclick="quickAsk('मेरे लिए एक गांव की किराना दुकान का business plan बनाइए।')">
+🏪 Kirana Business Plan
+</button>
+
+<button class="quick-btn" onclick="quickAsk('गांव में dairy farming business कैसे शुरू करें?')">
+🐄 Dairy Business
+</button>
+
+<button class="quick-btn" onclick="quickAsk('गांव में poultry farming business कैसे शुरू करें?')">
+🐔 Poultry Business
+</button>
+
+<button class="quick-btn" onclick="quickAsk('गांव में खेती से जुड़ा profitable business बताइए।')">
+🌾 Agriculture Business
+</button>
+
+<button class="quick-btn" onclick="quickAsk('मेरे business की marketing कैसे करूं?')">
+📣 Marketing Advice
+</button>
+
+<button class="quick-btn" onclick="quickAsk('Business शुरू करने के लिए loan और सरकारी schemes की जानकारी बताइए।')">
+🏦 Loan & Schemes
+</button>
+
+<button class="quick-btn" onclick="quickAsk('मेरे business के लिए एक simple financial plan बनाइए।')">
+💰 Financial Plan
+</button>
+
+<button class="quick-btn" onclick="quickAsk('ग्रामीण क्षेत्र में महिलाओं के लिए अच्छे business ideas बताइए।')">
+👩 Women Business
+</button>
+
+<button class="quick-btn" onclick="quickAsk('गांव के युवाओं के लिए अच्छे startup ideas बताइए।')">
+👨‍🌾 Youth Business
+</button>
+
+</aside>
+
+
+<main class="chat-box">
+
+<div class="chat-header">
+<div>
+<strong>🤖 AI Business Advisor</strong>
+<div class="status">● Online</div>
+</div>
+
+<button class="btn btn-secondary" onclick="downloadChat()">
+📥 Download
+</button>
+</div>
+
+
+<div id="chatMessages" class="chat-messages">
+
+<div class="message bot">
+<div class="avatar">🤖</div>
+<div class="bubble">
+नमस्ते! 👋 मैं आपका <b>AI Village Business Advisor</b> हूं।
+
+मैं आपकी मदद कर सकता हूं:
+
+• Business ideas
+• Investment & profit
+• Marketing
+• Customer targeting
+• Pricing
+• Business plan
+• Loan/scheme guidance
+• Agriculture-related business
+• Village startup ideas
+
+आप अपना सवाल नीचे लिखें। 😊
+</div>
+</div>
+
+</div>
+
+
+<div class="input-area">
+
+<textarea id="userInput"
+placeholder="जैसे: मेरे पास ₹50,000 हैं, गांव में कौन सा business शुरू करूं?"
+onkeydown="handleKey(event)"></textarea>
+
+<div class="input-buttons">
+
+<button class="btn btn-primary" onclick="sendMessage()">
+🚀 Ask AI
+</button>
+
+<button class="btn btn-secondary" onclick="startVoice()">
+🎤 Voice
+</button>
+
+<button class="btn btn-secondary" onclick="copyLast()">
+📋 Copy
+</button>
+
+<button class="btn btn-secondary" onclick="speakLast()">
+🔊 Speak
+</button>
+
+</div>
+
+</div>
+
+</main>
+
+</div>
+
+
+<section class="calculator">
+
+<h2>💰 Quick Business Profit Calculator</h2>
+
+<div class="calc-grid">
+
+<input type="number" id="investment"
+placeholder="Investment ₹">
+
+<input type="number" id="monthlySales"
+placeholder="Monthly Sales ₹">
+
+<input type="number" id="monthlyExpense"
+placeholder="Monthly Expenses ₹">
+
+</div>
+
+<br>
+
+<button class="btn btn-primary" onclick="calculateProfit()">
+Calculate Profit
+</button>
+
+<div id="calcResult" class="result">
+अपनी details डालकर profit calculate करें।
+</div>
+
+</section>
+
+
+<section class="features">
+
+<h2>🚀 Website Features</h2>
+
+<div class="feature-grid">
+
+<div class="feature">
+<div class="feature-icon">💡</div>
+<b>Business Ideas</b>
+<p>Village-focused business suggestions.</p>
+</div>
+
+<div class="feature">
+<div class="feature-icon">💰</div>
+<b>Profit Planning</b>
+<p>Investment और profit planning.</p>
+</div>
+
+<div class="feature">
+<div class="feature-icon">📣</div>
+<b>Marketing</b>
+<p>Local customer marketing strategies.</p>
+</div>
+
+<div class="feature">
+<div class="feature-icon">🏦</div>
+<b>Loan Guidance</b>
+<p>Business finance guidance.</p>
+</div>
+
+<div class="feature">
+<div class="feature-icon">🌾</div>
+<b>Agriculture</b>
+<p>Farming-related business ideas.</p>
+</div>
+
+<div class="feature">
+<div class="feature-icon">📊</div>
+<b>Business Plan</b>
+<p>AI-generated business plans.</p>
+</div>
+
+<div class="feature">
+<div class="feature-icon">👥</div>
+<b>Customers</b>
+<p>Target customer suggestions.</p>
+</div>
+
+<div class="feature">
+<div class="feature-icon">🎯</div>
+<b>Pricing</b>
+<p>Product pricing strategy.</p>
+</div>
+
+</div>
+</section>
+
+</div>
+
+
+<footer>
+🌾 AI Village Business Advisor • Built with Groq AI
+</footer>
+
+
+<script>
+
+/* =========================================================
+   GROQ CONFIGURATION
+   IMPORTANT:
+   API KEY IN FRONTEND IS NOT SECURE.
+   FOR DEMO ONLY.
+========================================================= */
+
+const GROQ_API_KEY = "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";
+
+/*
+Current Groq model example:
+openai/gpt-oss-120b
+
+If this model is unavailable in your account,
+replace it with another model available in your
+Groq console.
+*/
+
+const GROQ_MODEL = "openai/gpt-oss-120b";
+
+const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
+
+let conversation = [];
+
+let lastAnswer = "";
+
+
+/* =========================================================
+   SEND MESSAGE
+========================================================= */
+
+async function sendMessage(){
+
+    const input = document.getElementById("userInput");
+    const question = input.value.trim();
+
+    if(!question) return;
+
+    if(
+        GROQ_API_KEY === "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" ||
+        GROQ_API_KEY === "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"
+    ){
+        alert("पहले JavaScript में अपनी Groq API key डालें।");
+        return;
+    }
+
+    addMessage(question,"user");
+
+    input.value = "";
+
+    const loadingId = addLoading();
+
+    const systemPrompt = `
+You are AI Village Business Advisor, an expert assistant
+for rural entrepreneurs in India.
+
+Your job is to give practical, simple and realistic business
+advice.
+
+Help users with:
+
+1. Village business ideas
+2. Startup planning
+3. Investment estimation
+4. Revenue and profit estimation
+5. Marketing
+6. Customer targeting
+7. Pricing
+8. Agriculture businesses
+9. Dairy
+10. Poultry
+11. Kirana shops
+12. Food businesses
+13. Small manufacturing
+14. Digital businesses
+15. Women entrepreneurship
+16. Youth entrepreneurship
+17. Loan and government scheme guidance
+18. Business risks
+19. Step-by-step business plans
+20. Break-even analysis
+
+Important rules:
+
+- Reply in the same language as the user.
+- If user uses Hindi/Hinglish, reply in simple Hindi/Hinglish.
+- Use ₹ for Indian money.
+- Give realistic approximate estimates.
+- Clearly say when numbers are estimates.
+- Do not guarantee profits.
+- For government schemes, loan interest rates or eligibility,
+  advise the user to verify current official information.
+- Keep answers practical.
+- Use headings and bullet points.
+- When appropriate provide:
+  Investment
+  Monthly expenses
+  Expected sales
+  Estimated profit
+  Marketing plan
+  Risks
+  Action plan
+
+Never ask for passwords, API keys or sensitive banking information.
+`;
+
+    conversation.push({
+        role:"user",
+        content:question
+    });
+
+    try{
+
+        const response = await fetch(GROQ_URL,{
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json",
+                "Authorization":"Bearer " + GROQ_API_KEY
+            },
+            body:JSON.stringify({
+                model:GROQ_MODEL,
+                messages:[
+                    {
+                        role:"system",
+                        content:systemPrompt
+                    },
+                    ...conversation
+                ],
+                temperature:0.6,
+                max_tokens:1800
+            })
+        });
+
+        if(!response.ok){
+
+            const errorText = await response.text();
+
+            throw new Error(
+                "Groq API Error " +
+                response.status +
+                ": " +
+                errorText
+            );
+        }
+
+        const data = await response.json();
+
+        const answer =
+            data?.choices?.[0]?.message?.content ||
+            "AI से कोई response नहीं मिला।";
+
+        conversation.push({
+            role:"assistant",
+            content:answer
+        });
+
+        lastAnswer = answer;
+
+        removeLoading(loadingId);
+
+        addMessage(answer,"bot");
+
+        saveChat();
+
+    }catch(error){
+
+        removeLoading(loadingId);
+
+        addMessage(
+            "❌ Error: " + error.message +
+            "\n\nकृपया API key, internet connection और Groq model check करें।",
+            "bot"
+        );
+
+        console.error(error);
+    }
+}
+
+
+/* =========================================================
+   ADD MESSAGE
+========================================================= */
+
+function addMessage(text,type){
+
+    const container =
+        document.getElementById("chatMessages");
+
+    const message =
+        document.createElement("div");
+
+    message.className =
+        "message " + type;
+
+    const avatar =
+        document.createElement("div");
+
+    avatar.className = "avatar";
+
+    avatar.textContent =
+        type === "bot" ? "🤖" : "👤";
+
+    const bubble =
+        document.createElement("div");
+
+    bubble.className = "bubble";
+
+    bubble.innerHTML =
+        formatText(text);
+
+    message.appendChild(avatar);
+    message.appendChild(bubble);
+
+    container.appendChild(message);
+
+    container.scrollTop =
+        container.scrollHeight;
+}
+
+
+/* =========================================================
+   TEXT FORMATTER
+========================================================= */
+
+function formatText(text){
+
+    let safe =
+        String(text)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;");
+
+    safe =
+        safe.replace(
+            /\*\*(.*?)\*\*/g,
+            "<b>$1</b>"
+        );
+
+    safe =
+        safe.replace(
+            /\n/g,
+            "<br>"
+        );
+
+    return safe;
+}
+
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+function addLoading(){
+
+    const id =
+        "loading-" + Date.now();
+
+    const container =
+        document.getElementById("chatMessages");
+
+    const message =
+        document.createElement("div");
+
+    message.className =
+        "message bot";
+
+    message.id = id;
+
+    message.innerHTML = `
+        <div class="avatar">🤖</div>
+        <div class="bubble">
+            <div class="typing">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            AI सोच रहा है...
+        </div>
+    `;
+
+    container.appendChild(message);
+
+    container.scrollTop =
+        container.scrollHeight;
+
+    return id;
+}
+
+function removeLoading(id){
+
+    const element =
+        document.getElementById(id);
+
+    if(element){
+        element.remove();
+    }
+}
+
+
+/* =========================================================
+   QUICK QUESTION
+========================================================= */
+
+function quickAsk(question){
+
+    document.getElementById("userInput").value =
+        question;
+
+    sendMessage();
+}
+
+
+/* =========================================================
+   ENTER KEY
+========================================================= */
+
+function handleKey(event){
+
+    if(
+        event.key === "Enter" &&
+        !event.shiftKey
+    ){
+
+        event.preventDefault();
+
+        sendMessage();
+    }
+}
+
+
+/* =========================================================
+   PROFIT CALCULATOR
+========================================================= */
+
+function calculateProfit(){
+
+    const investment =
+        Number(
+            document.getElementById("investment").value
+        ) || 0;
+
+    const sales =
+        Number(
+            document.getElementById("monthlySales").value
+        ) || 0;
+
+    const expenses =
+        Number(
+            document.getElementById("monthlyExpense").value
+        ) || 0;
+
+    const profit =
+        sales - expenses;
+
+    const margin =
+        sales > 0
+        ? ((profit / sales) * 100).toFixed(1)
+        : 0;
+
+    const result =
+        document.getElementById("calcResult");
+
+    result.innerHTML = `
+        <b>Investment:</b> ₹${investment.toLocaleString("en-IN")}
+        <br><br>
+        <b>Monthly Sales:</b> ₹${sales.toLocaleString("en-IN")}
+        <br><br>
+        <b>Monthly Expenses:</b> ₹${expenses.toLocaleString("en-IN")}
+        <br><br>
+        <b>Estimated Monthly Profit:</b>
+        ₹${profit.toLocaleString("en-IN")}
+        <br><br>
+        <b>Profit Margin:</b> ${margin}%
+    `;
+}
+
+
+/* =========================================================
+   DARK MODE
+========================================================= */
+
+function toggleDark(){
+
+    document.body.classList.toggle("dark");
+
+    const enabled =
+        document.body.classList.contains("dark");
+
+    localStorage.setItem(
+        "villageDarkMode",
+        enabled
+    );
+}
+
+if(
+    localStorage.getItem("villageDarkMode")
+    === "true"
+){
+    document.body.classList.add("dark");
+}
+
+
+/* =========================================================
+   VOICE INPUT
+========================================================= */
+
+function startVoice(){
+
+    const SpeechRecognition =
+        window.SpeechRecognition ||
+        window.webkitSpeechRecognition;
+
+    if(!SpeechRecognition){
+
+        alert(
+            "आपके browser में Voice Recognition support नहीं है।"
+        );
+
+        return;
+    }
+
+    const recognition =
+        new SpeechRecognition();
+
+    recognition.lang = "hi-IN";
+
+    recognition.continuous = false;
+
+    recognition.interimResults = false;
+
+    recognition.onstart = function(){
+
+        alert("🎤 बोलना शुरू करें...");
+    };
+
+    recognition.onresult = function(event){
+
+        const transcript =
+            event.results[0][0].transcript;
+
+        document.getElementById("userInput").value =
+            transcript;
+    };
+
+    recognition.onerror = function(){
+
+        alert("Voice input में समस्या हुई।");
+    };
+
+    recognition.start();
+}
+
+
+/* =========================================================
+   TEXT TO SPEECH
+========================================================= */
+
+function speakLast(){
+
+    if(!lastAnswer){
+
+        alert("पहले AI से कोई answer प्राप्त करें।");
+
+        return;
+    }
+
+    if(!("speechSynthesis" in window)){
+
+        alert(
+            "आपके browser में Text-to-Speech support नहीं है।"
+        );
+
+        return;
+    }
+
+    speechSynthesis.cancel();
+
+    const speech =
+        new SpeechSynthesisUtterance(lastAnswer);
+
+    speech.lang = "hi-IN";
+
+    speech.rate = 0.95;
+
+    speech.pitch = 1;
+
+    speechSynthesis.speak(speech);
+}
+
+
+/* =========================================================
+   COPY LAST ANSWER
+========================================================= */
+
+async function copyLast(){
+
+    if(!lastAnswer){
+
+        alert("Copy करने के लिए कोई AI answer नहीं है।");
+
+        return;
+    }
+
+    try{
+
+        await navigator.clipboard.writeText(
+            lastAnswer
+        );
+
+        alert("✅ Answer copied!");
+
+    }catch{
+
+        alert("Copy नहीं हो पाया।");
+    }
+}
+
+
+/* =========================================================
+   CLEAR CHAT
+========================================================= */
+
+function clearChat(){
+
+    if(!confirm("क्या आप पूरी chat delete करना चाहते हैं?")){
+        return;
+    }
+
+    conversation = [];
+
+    lastAnswer = "";
+
+    document.getElementById("chatMessages").innerHTML = `
+        <div class="message bot">
+            <div class="avatar">🤖</div>
+            <div class="bubble">
+                Chat clear हो गई। 👋<br><br>
+                मैं आपका AI Village Business Advisor हूं।
+                अपना business question पूछिए।
+            </div>
+        </div>
+    `;
+
+    localStorage.removeItem("villageChat");
+}
+
+
+/* =========================================================
+   SAVE CHAT
+========================================================= */
+
+function saveChat(){
+
+    localStorage.setItem(
+        "villageChat",
+        JSON.stringify(conversation)
+    );
+}
+
+
+/* =========================================================
+   LOAD CHAT
+========================================================= */
+
+function loadChat(){
+
+    try{
+
+        const saved =
+            localStorage.getItem("villageChat");
+
+        if(!saved) return;
+
+        conversation =
+            JSON.parse(saved);
+
+        const container =
+            document.getElementById("chatMessages");
+
+        conversation.forEach(item => {
+
+            if(item.role === "user"){
+
+                addMessage(
+                    item.content,
+                    "user"
+                );
+
+            }else if(item.role === "assistant"){
+
+                addMessage(
+                    item.content,
+                    "bot"
+                );
+
+                lastAnswer =
+                    item.content;
+            }
+
+        });
+
+    }catch(error){
+
+        console.log(error);
+    }
+}
+
+
+/* =========================================================
+   DOWNLOAD CHAT
+========================================================= */
+
+function downloadChat(){
+
+    if(conversation.length === 0){
+
+        alert("Download करने के लिए chat खाली है।");
+
+        return;
+    }
+
+    let text =
+        "AI VILLAGE BUSINESS ADVISOR\n\n";
+
+    conversation.forEach(item => {
+
+        text +=
+            (item.role === "user"
+                ? "YOU: "
+                : "AI: ") +
+            item.content +
+            "\n\n--------------------\n\n";
+    });
+
+    const blob =
+        new Blob(
+            [text],
+            {type:"text/plain;charset=utf-8"}
+        );
+
+    const url =
+        URL.createObjectURL(blob);
+
+    const a =
+        document.createElement("a");
+
+    a.href = url;
+
+    a.download =
+        "village-business-advisor.txt";
+
+    a.click();
+
+    URL.revokeObjectURL(url);
+}
+
+
+/* =========================================================
+   START
+========================================================= */
+
+loadChat();
+
+</script>
+
+</body>
+</html>
